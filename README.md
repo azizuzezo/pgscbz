@@ -437,3 +437,23 @@ Gunakan dengan risiko sendiri (lihat [LICENSE](LICENSE)).
 <div align="center">
   <sub>Dibuat dengan ☕ oleh <a href="https://github.com/hirotomasato">@hirotomasato</a></sub>
 </div>
+---
+
+## 🚢 Deploy (fork pgscbz)
+
+Perubahan di fork ini dibanding upstream:
+- Server menolak start kalau `API_KEY` kosong (kecuali `ALLOW_NO_AUTH=true`, hanya untuk tes lokal).
+- `PORT` dibaca otomatis (Railway, Render, dll), `API_PORT` tetap menang kalau diisi.
+- `Dockerfile` (build statis tanpa CGO, jalan sebagai user non-root, data SQLite di `/data`).
+
+```bash
+docker build -t scbz .
+docker run -d --name scbz --restart unless-stopped -p 8000:8000 \
+  -e SOCIABUZZ_USERNAME=username_creator_kamu \
+  -e API_KEY=$(openssl rand -hex 24) \
+  -v scbz-data:/data scbz
+curl localhost:8000/health
+```
+
+Di PaaS: deploy repo ini dengan Dockerfile, isi `SOCIABUZZ_USERNAME` dan `API_KEY`, pasang volume di `/data`.
+Jangan buka port ke publik tanpa HTTPS; `API_KEY` satu-satunya pengaman. Lihat `.env.example`.

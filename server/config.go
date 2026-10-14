@@ -58,7 +58,7 @@ func LoadSettings() *Settings {
 		BaseURL:             envStr("SOCIABUZZ_BASE_URL", "https://sociabuzz.com"),
 		DefaultCreator:      firstEnv("SOCIABUZZ_USERNAME", "DEFAULT_CREATOR"),
 		Host:                envStr("API_HOST", "0.0.0.0"),
-		Port:                envInt("API_PORT", 8000),
+		Port:                envInt("API_PORT", envInt("PORT", 8000)),
 		APIKey:              os.Getenv("API_KEY"),
 		APIKeys:             splitEnv("API_KEYS"),
 		SessionBackend:      strings.ToLower(envStr("SESSION_BACKEND", "sqlite")),

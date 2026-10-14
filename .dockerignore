@@ -1,0 +1,5 @@
+.git
+*.db
+scbz-server
+scbz-server.exe
+.env

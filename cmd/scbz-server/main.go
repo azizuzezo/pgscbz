@@ -21,7 +21,11 @@ func main() {
 	cfg := server.LoadSettings()
 
 	if !cfg.AuthEnabled() {
-		log.Println("WARNING: API authentication DISABLED — set API_KEY in env for production!")
+		// Anyone who can reach the port could open payment sessions on the creator's account.
+		if os.Getenv("ALLOW_NO_AUTH") != "true" {
+			log.Fatal("API_KEY is not set. Set API_KEY (or API_KEYS), or ALLOW_NO_AUTH=true for local testing only.")
+		}
+		log.Println("WARNING: API authentication DISABLED (ALLOW_NO_AUTH=true)")
 	} else {
 		log.Printf("API authentication ENABLED (%d key(s))", len(cfg.AllKeys()))
 	}
